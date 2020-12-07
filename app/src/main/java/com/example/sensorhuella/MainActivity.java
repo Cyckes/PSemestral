@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSensorChanged(SensorEvent event) {
                 float val = event.values[0];
-                //getSupportActionBar().setTitle("Luminosidad: " + val + " lx");
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
                 float newBrightness = 50 - val;
                 lp.screenBrightness = newBrightness / 225 ;
