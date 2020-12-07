@@ -15,6 +15,7 @@ import android.hardware.biometrics.BiometricManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,8 +116,10 @@ public class MainActivity extends AppCompatActivity {
             public void onSensorChanged(SensorEvent event) {
                 float val = event.values[0];
                 //getSupportActionBar().setTitle("Luminosidad: " + val + " lx");
-                int newval = (int) (255f * val / maxVal);
-                root.setBackgroundColor(Color.rgb(newval, newval, newval));
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                float newBrightness = 30 - val;
+                lp.screenBrightness = newBrightness / 225 ;
+                getWindow().setAttributes(lp);
             }
 
             @Override
