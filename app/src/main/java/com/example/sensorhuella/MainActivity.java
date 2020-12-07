@@ -7,6 +7,10 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.hardware.biometrics.BiometricManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,10 +21,17 @@ import android.widget.Toast;
 
 import java.util.concurrent.Executor;
 
+import static android.hardware.Sensor.TYPE_LIGHT;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView msg_txt;
     Button login_btn;
+    private SensorManager sensorManager;
+    private Sensor lightSensor;
+    private SensorEventListener lightEvtListener;
+    private View root;
+    private float maxVal;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -87,5 +98,43 @@ public class MainActivity extends AppCompatActivity {
                 biometricPrompt.authenticate(promptInfo);
             }
         });
+
+        root = findViewById(R.id.root);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
+
+        if (lightSensor == null) {
+            Toast.makeText(this, ("El dispositivo no tiene sensor de iluminacion"), Toast.LENGTH_LONG);
+            finish();
+        }
+
+        maxVal = lightSensor.getMaximumRange();
+
+        lightEvtListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                float val = event.values[0];
+                //getSupportActionBar().setTitle("Luminosidad: " + val + " lx");
+                int newval = (int) (255f * val / maxVal);
+                root.setBackgroundColor(Color.rgb(newval, newval, newval));
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(lightEvtListener, lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(lightEvtListener);
     }
 }
