@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +27,8 @@ import static android.hardware.Sensor.TYPE_LIGHT;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView msg_txt;
-    Button login_btn;
+    Button btnSesion;
+    ImageButton imgbtnHuella;
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private SensorEventListener lightEvtListener;
@@ -40,27 +41,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        msg_txt = (TextView) findViewById(R.id.txt_msg);
-        login_btn = (Button) findViewById(R.id.login_btn);
+        //msg_txt = (TextView) findViewById(R.id.txt_msg);
+        //login_btn = (Button) findViewById(R.id.login_btn);
+        imgbtnHuella = (ImageButton) findViewById(R.id.imgbtnHuella);
 
         androidx.biometric.BiometricManager biometricManager = androidx.biometric.BiometricManager.from(this);
         switch (biometricManager.canAuthenticate())
         {
             case BiometricManager.BIOMETRIC_SUCCESS:
-                msg_txt.setText("Puede usar el sensor de huellas para iniciar sesión");
-                msg_txt.setTextColor(Color.parseColor("#FAFAFA"));
+                //msg_txt.setText("Puede usar el sensor de huellas para iniciar sesión");
+                //msg_txt.setTextColor(Color.parseColor("#FAFAFA"));
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                msg_txt.setText("El dispositivo no dispone de un sensor de huellas");
-                login_btn.setVisibility(View.GONE);
+                //msg_txt.setText("El dispositivo no dispone de un sensor de huellas");
+                //login_btn.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(),"El dispositivo no dispone de un sensor de huellas",Toast.LENGTH_SHORT).show();
                 break;
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                msg_txt.setText("El sensor de huellas no esta disponible");
-                login_btn.setVisibility(View.GONE);
+                //msg_txt.setText("El sensor de huellas no esta disponible");
+                //login_btn.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(),"El sensor de huellas no esta disponible",Toast.LENGTH_SHORT).show();
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                msg_txt.setText("No se ha configurado nonguna huella, verificar las opciones del dispositivo");
-                login_btn.setVisibility(View.GONE);
+                //msg_txt.setText("No se ha configurado nonguna huella, verificar las opciones del dispositivo");
+                //login_btn.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(),"No se ha configurado nonguna huella, verificar las opciones del dispositivo",Toast.LENGTH_SHORT).show();
                 break;
         }
 
@@ -93,7 +98,14 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
 
-        login_btn.setOnClickListener(new View.OnClickListener() {
+        //login_btn.setOnClickListener(new View.OnClickListener() {
+          //  @Override
+            //public void onClick(View view) {
+              //  biometricPrompt.authenticate(promptInfo);
+            //}
+        //});
+
+        imgbtnHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 biometricPrompt.authenticate(promptInfo);
