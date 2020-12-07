@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 float val = event.values[0];
                 //getSupportActionBar().setTitle("Luminosidad: " + val + " lx");
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
-                float newBrightness = 30 - val;
+                float newBrightness = 50 - val;
                 lp.screenBrightness = newBrightness / 225 ;
                 getWindow().setAttributes(lp);
             }
