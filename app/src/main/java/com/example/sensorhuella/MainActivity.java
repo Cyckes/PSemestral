@@ -42,6 +42,53 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
+
+        if (lightSensor == null) {
+            Toast.makeText(this, ("El dispositivo no tiene sensor de iluminacion"), Toast.LENGTH_LONG);
+            finish();
+        }
+
+        maxVal = lightSensor.getMaximumRange();
+
+        lightEvtListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                float val = event.values[0];
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                if (val < 30){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/7.5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 29 && val < 50){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/6.5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 49 && val < 100){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/6));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 99 && val < 1000){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 999 && val < 5000){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/3));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 4999){
+                    lp.screenBrightness = (int) (255f * val / (maxVal));
+                    getWindow().setAttributes(lp);
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
         //msg_txt = (TextView) findViewById(R.id.txt_msg);
         //login_btn = (Button) findViewById(R.id.login_btn);
         imgbtnHuella = (ImageButton) findViewById(R.id.imgbtnHuella);
@@ -115,41 +162,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        root = findViewById(R.id.root);
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
-
-        if (lightSensor == null) {
-            Toast.makeText(this, ("El dispositivo no tiene sensor de iluminacion"), Toast.LENGTH_LONG);
-            finish();
-        }
-
-        maxVal = lightSensor.getMaximumRange();
-
-        lightEvtListener = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                float val = event.values[0];
-                WindowManager.LayoutParams lp = getWindow().getAttributes();
-                if (val < 30){
-                    lp.screenBrightness = (int) (255f * val / (maxVal/7));
-                    getWindow().setAttributes(lp);
-                }
-                if (val > 29 && val < 5000){
-                    lp.screenBrightness = (int) (255f * val / (maxVal/5));
-                    getWindow().setAttributes(lp);
-                }
-                if (val > 4999){
-                    lp.screenBrightness = (int) (255f * val / (maxVal));
-                    getWindow().setAttributes(lp);
-                }
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-            }
-        };
     }
 
     @Override

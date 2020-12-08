@@ -7,10 +7,16 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +35,8 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
     double latitud=0.0;
     double longitud=0.0;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,13 +47,26 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
     }
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         ubicacionactual();
+
     }
+
     private void agregar_marcador(double latitud, double longitud){
         LatLng coordenadas= new LatLng(latitud, longitud);
+        //CameraUpdate ubicacionactual= CameraUpdateFactory.newLatLngZoom(coordenadas,16);
+        //if(marcador!=null) {
+        //    marcador.remove();}
+        //marcador= mMap.addMarker(new MarkerOptions()
+        //.position(coordenadas)
+        //        .title("Ubicación Actual")
+        //        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)));
+
+
+
         mMap.addMarker(new MarkerOptions().position(coordenadas).title("Ubicación Actual"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coordenadas));
         CameraPosition camaraPosition = new CameraPosition.Builder()
@@ -55,19 +76,24 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
                 .tilt(45)
                 .build();
         mMap.animateCamera((CameraUpdateFactory.newCameraPosition(camaraPosition)));
+
+        // mMap.animateCamera(ubicacionactual);
     }
+
     private void actualizarUbicacion(Location location){
         if (location != null) {
 
-            latitud= location.getLatitude();
+            latitud=location.getLatitude();
             longitud = location.getLongitude();
+            String a = String.valueOf(location.getLatitude());
+
             agregar_marcador(latitud,longitud);
+
         }
     }
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
-
             actualizarUbicacion(location);
         }
 
@@ -97,5 +123,4 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
         actualizarUbicacion(location);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,15000,0,locationListener);
     }
-
 }
