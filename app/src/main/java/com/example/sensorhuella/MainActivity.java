@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
             public void onSensorChanged(SensorEvent event) {
                 float val = event.values[0];
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
-                float newBrightness = 50 - val;
-                lp.screenBrightness = newBrightness / 225 ;
+                // float newBrightness = 50 + val;
+                lp.screenBrightness = (int) (255f * val / 1000);
                 getWindow().setAttributes(lp);
             }
 
