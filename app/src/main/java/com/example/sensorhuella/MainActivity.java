@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -109,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 biometricPrompt.authenticate(promptInfo);
+                Intent i = new Intent(MainActivity.this, SensorGPS.class);
+                startActivity(i);
             }
         });
 
