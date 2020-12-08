@@ -28,12 +28,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static android.hardware.Sensor.TYPE_LIGHT;
+
 public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker marcador;
     double latitud=0.0;
     double longitud=0.0;
+    private SensorManager sensorManager;
+    private Sensor lightSensor;
+    private SensorEventListener lightEvtListener;
+    private View root;
+    private float maxVal;
 
 
 
@@ -41,6 +48,54 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_g_p_s);
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
+
+        if (lightSensor == null) {
+            Toast.makeText(this, ("El dispositivo no tiene sensor de iluminacion"), Toast.LENGTH_LONG);
+            finish();
+        }
+
+        maxVal = lightSensor.getMaximumRange();
+
+        lightEvtListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                float val = event.values[0];
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                if (0.0 <=val && val < 30.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/7.5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 29.0 && val < 50.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/6.5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 49.0 && val < 100.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/6));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 99.0 && val < 1000.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 999.0 && val < 5000.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/3));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 4999.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal));
+                    getWindow().setAttributes(lp);
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -122,5 +177,17 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         actualizarUbicacion(location);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,15000,0,locationListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(lightEvtListener, lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(lightEvtListener);
     }
 }

@@ -57,27 +57,27 @@ public class MainActivity extends AppCompatActivity {
             public void onSensorChanged(SensorEvent event) {
                 float val = event.values[0];
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
-                if (val < 30){
+                if (0.0 <=val && val < 30.0){
                     lp.screenBrightness = (int) (255f * val / (maxVal/7.5));
                     getWindow().setAttributes(lp);
                 }
-                if (val > 29 && val < 50){
+                if (val > 29.0 && val < 50.0){
                     lp.screenBrightness = (int) (255f * val / (maxVal/6.5));
                     getWindow().setAttributes(lp);
                 }
-                if (val > 49 && val < 100){
+                if (val > 49.0 && val < 100.0){
                     lp.screenBrightness = (int) (255f * val / (maxVal/6));
                     getWindow().setAttributes(lp);
                 }
-                if (val > 99 && val < 1000){
+                if (val > 99.0 && val < 1000.0){
                     lp.screenBrightness = (int) (255f * val / (maxVal/5));
                     getWindow().setAttributes(lp);
                 }
-                if (val > 999 && val < 5000){
+                if (val > 999.0 && val < 5000.0){
                     lp.screenBrightness = (int) (255f * val / (maxVal/3));
                     getWindow().setAttributes(lp);
                 }
-                if (val > 4999){
+                if (val > 4999.0){
                     lp.screenBrightness = (int) (255f * val / (maxVal));
                     getWindow().setAttributes(lp);
                 }
