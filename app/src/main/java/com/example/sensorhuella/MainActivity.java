@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 Toast.makeText(getApplicationContext(),"Inicio de sesión correcto !",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, SensorGPS.class);
+                startActivity(i);
             }
 
             @Override
@@ -157,8 +159,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 biometricPrompt.authenticate(promptInfo);
-                Intent i = new Intent(MainActivity.this, SensorGPS.class);
-                startActivity(i);
+
             }
         });
 
