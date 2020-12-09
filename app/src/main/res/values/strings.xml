@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Aqui va el nombre cute</string>
+    <string name="title_activity_sensor_g_p_s">Map</string>
 </resources>

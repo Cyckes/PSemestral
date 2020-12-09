@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -40,6 +41,53 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
+
+        if (lightSensor == null) {
+            Toast.makeText(this, ("El dispositivo no tiene sensor de iluminacion"), Toast.LENGTH_LONG);
+            finish();
+        }
+
+        maxVal = lightSensor.getMaximumRange();
+
+        lightEvtListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                float val = event.values[0];
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                if (0.0 <=val && val < 30.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/7.5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 29.0 && val < 50.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/6.5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 49.0 && val < 100.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/6));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 99.0 && val < 1000.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/5));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 999.0 && val < 5000.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal/3));
+                    getWindow().setAttributes(lp);
+                }
+                if (val > 4999.0){
+                    lp.screenBrightness = (int) (255f * val / (maxVal));
+                    getWindow().setAttributes(lp);
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
 
         //msg_txt = (TextView) findViewById(R.id.txt_msg);
         //login_btn = (Button) findViewById(R.id.login_btn);
@@ -82,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 Toast.makeText(getApplicationContext(),"Inicio de sesión correcto !",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, SensorGPS.class);
+                startActivity(i);
             }
 
             @Override
@@ -109,35 +159,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 biometricPrompt.authenticate(promptInfo);
+
             }
         });
 
-        root = findViewById(R.id.root);
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
-
-        if (lightSensor == null) {
-            Toast.makeText(this, ("El dispositivo no tiene sensor de iluminacion"), Toast.LENGTH_LONG);
-            finish();
-        }
-
-        maxVal = lightSensor.getMaximumRange();
-
-        lightEvtListener = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
-                float val = event.values[0];
-                WindowManager.LayoutParams lp = getWindow().getAttributes();
-                float newBrightness = 50 - val;
-                lp.screenBrightness = newBrightness / 225 ;
-                getWindow().setAttributes(lp);
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-            }
-        };
     }
 
     @Override
