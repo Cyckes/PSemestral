@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private SensorEventListener lightEvtListener;
-    private View root;
     private float maxVal;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -55,9 +54,11 @@ public class MainActivity extends AppCompatActivity {
         lightEvtListener = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
+                //valor de luz detectado por el sensor
                 float val = event.values[0];
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
                 if (0.0 <=val && val < 30.0){
+                    //conversion a valores en base a 255 para el brillo de la pantalla
                     lp.screenBrightness = (int) (255f * val / (maxVal/7.5));
                     getWindow().setAttributes(lp);
                 }
