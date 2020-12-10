@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                         if (nombres[i].equals(user)) {
                             existe = true;
                         }
+
                         if (existe) {
                             etcontraseña.setText("");
                             etusuaario.setText("");
@@ -159,9 +160,10 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Inicio de sesión correcto !", Toast.LENGTH_SHORT).show();
                             Intent j = new Intent(MainActivity.this, Menu.class);
                             startActivity(j);
+                            break;
                         }
-                        else
-                        {
+
+                        if (existe == false) {
                             Toast.makeText(getApplicationContext(), "Introduzca un nombre de usuario válido", Toast.LENGTH_SHORT).show();
                         }
                     }

@@ -8,26 +8,32 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static android.hardware.Sensor.TYPE_LIGHT;
 
-public class Menu extends AppCompatActivity {
+public class Luz extends AppCompatActivity {
 
-    Button btnBoton3, btnexit, btnluz;
+    Button btnclose, btnback;
+    TextView textLIGHT_reading;
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private SensorEventListener lightEvtListener;
-    private View root;
     private float maxVal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_luz);
+
+        btnback = findViewById(R.id.btnprofile);
+        btnclose = findViewById(R.id.btnclose);
+        textLIGHT_reading = findViewById(R.id.tvlight);
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
@@ -37,10 +43,12 @@ public class Menu extends AppCompatActivity {
             finish();
         }
         maxVal = lightSensor.getMaximumRange();
-
         lightEvtListener = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
+                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                    textLIGHT_reading.setText("Luz recibida: " + event.values[0] + " lx");
+                }
                 float val = event.values[0];
                 WindowManager.LayoutParams lp = getWindow().getAttributes();
                 if (0.0 <=val && val < 30.0){
@@ -75,37 +83,28 @@ public class Menu extends AppCompatActivity {
             }
         };
 
-        btnBoton3 = findViewById(R.id.btnSesion3);
-        btnexit = findViewById(R.id.btnSesion2);
-        btnluz = findViewById(R.id.btnluz);
 
-        btnBoton3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Menu.this, SensorGPS.class);
-                startActivity(i);
-            }
-        });
+       btnclose.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent i = new Intent(Luz.this, MainActivity.class);
+               startActivity(i);
+               Toast.makeText( getApplicationContext(),"Sesion cerrada correctamente", Toast.LENGTH_LONG).show();
+           }
+       });
 
-        btnexit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Menu.this, MainActivity.class);
-                startActivity(i);
-                Toast.makeText( getApplicationContext(),"Sesion cerrada correctamente", Toast.LENGTH_LONG).show();
-            }
-        });
+       btnback.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent i = new Intent(Luz.this, Menu.class);
+               startActivity(i);
+           }
+       });
 
-        btnluz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Menu.this, Luz.class);
-                startActivity(i);
-            }
-        });
     }
 
-    @Override
+
+
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(lightEvtListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -116,5 +115,5 @@ public class Menu extends AppCompatActivity {
         super.onPause();
         sensorManager.unregisterListener(lightEvtListener);
     }
-}
 
+}
