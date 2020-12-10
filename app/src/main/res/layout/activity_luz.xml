@@ -42,21 +42,21 @@
         android:textColor="#EFEFEF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.112"
+        app:layout_constraintHorizontal_bias="0.181"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvlight"
-        app:layout_constraintVertical_bias="0.344" />
+        app:layout_constraintVertical_bias="0.343" />
 
     <Button
         android:id="@+id/btnclose"
-        android:layout_width="169dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:backgroundTint="#c60084"
         android:text="Cerrar Sesión"
         android:textColor="#EFEFEF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.195"
+        app:layout_constraintHorizontal_bias="0.185"
         app:layout_constraintStart_toEndOf="@+id/btnprofile"
         app:layout_constraintTop_toBottomOf="@+id/tvlight"
         app:layout_constraintVertical_bias="0.343" />
