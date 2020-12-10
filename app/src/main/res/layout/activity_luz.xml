@@ -35,8 +35,8 @@
 
     <Button
         android:id="@+id/btnprofile"
-        android:layout_width="169dp"
-        android:layout_height="48dp"
+        android:layout_width="146dp"
+        android:layout_height="85dp"
         android:backgroundTint="#c60084"
         android:text="Regresar al Perfil"
         android:textColor="#EFEFEF"
@@ -49,17 +49,17 @@
 
     <Button
         android:id="@+id/btnclose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="132dp"
+        android:layout_height="85dp"
         android:backgroundTint="#c60084"
         android:text="Cerrar Sesión"
         android:textColor="#EFEFEF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.185"
+        app:layout_constraintHorizontal_bias="0.388"
         app:layout_constraintStart_toEndOf="@+id/btnprofile"
         app:layout_constraintTop_toBottomOf="@+id/tvlight"
-        app:layout_constraintVertical_bias="0.343" />
+        app:layout_constraintVertical_bias="0.342" />
 
     <ImageView
         android:id="@+id/ivlight"
