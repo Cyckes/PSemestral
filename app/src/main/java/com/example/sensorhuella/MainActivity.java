@@ -142,13 +142,29 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 String user = etusuaario.getText().toString();
-                if ( user.matches("")){
-                    Toast.makeText(getApplicationContext(),"Introduzca su nombre de usuario",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "Inicio de sesión correcto !", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(MainActivity.this, Menu.class);
-                    startActivity(i);
+                boolean existe = false;
+
+                if (user.matches("")) {
+
+                    Toast.makeText(getApplicationContext(), "Introduzca su nombre de usuario", Toast.LENGTH_SHORT).show();
+                } else {
+                    for (int i = 0; i < 10; i++) {
+                        if (nombres[i].equals(user)) {
+                            existe = true;
+                        }
+                        if (existe) {
+                            etcontraseña.setText("");
+                            etusuaario.setText("");
+                            existe = false;
+                            Toast.makeText(getApplicationContext(), "Inicio de sesión correcto !", Toast.LENGTH_SHORT).show();
+                            Intent j = new Intent(MainActivity.this, Menu.class);
+                            startActivity(j);
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Introduzca un nombre de usuario válido", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             }
 
