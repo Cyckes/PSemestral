@@ -177,12 +177,14 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onResume() {
         super.onResume();
+        //se usa cuando la app regresa de la pausa
         sensorManager.registerListener(lightEvtListener, lightSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        //cuando se pausa la actividad
         sensorManager.unregisterListener(lightEvtListener);
     }
 }
