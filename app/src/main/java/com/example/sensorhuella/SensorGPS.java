@@ -33,9 +33,9 @@ import static android.hardware.Sensor.TYPE_LIGHT;
 public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private Marker marcador;
-    double latitud=0.0;
-    double longitud=0.0;
+    private Marker marcador; // Variable para controlar el marcador en el mapa
+    double latitud=0.0; //Variable que contiene la latitud de la posicion actual
+    double longitud=0.0; //Variable que contiene la longitud de la posicion adtual
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private SensorEventListener lightEvtListener;
@@ -109,18 +109,9 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
         ubicacionactual();
 
     }
-
+    // Mostrar el marcador en el mapa dependiendo de la posición actual
     private void agregar_marcador(double latitud, double longitud){
         LatLng coordenadas= new LatLng(latitud, longitud);
-        //CameraUpdate ubicacionactual= CameraUpdateFactory.newLatLngZoom(coordenadas,16);
-        //if(marcador!=null) {
-        //    marcador.remove();}
-        //marcador= mMap.addMarker(new MarkerOptions()
-        //.position(coordenadas)
-        //        .title("Ubicación Actual")
-        //        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher)));
-
-
 
         mMap.addMarker(new MarkerOptions().position(coordenadas).title("Ubicación Actual"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(coordenadas));
@@ -131,10 +122,10 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
                 .tilt(45)
                 .build();
         mMap.animateCamera((CameraUpdateFactory.newCameraPosition(camaraPosition)));
-
-        // mMap.animateCamera(ubicacionactual);
+        //Modificamos la ubicación de camara en la posición que se encuentra el marcador
     }
-
+    // Metodo que permite ir actualizando la posición actual
+    // Obteniendola por medio de la clase Location, con esto se obtiene la latitud y longitud
     private void actualizarUbicacion(Location location){
         if (location != null) {
 
@@ -146,7 +137,10 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
 
         }
     }
+    // Implementación de objeto tipo LocationListener, este estara pendiente a
+    // cualquier cambio de la ubicacion obtenida por el GPS del dispositivo
     LocationListener locationListener = new LocationListener() {
+        //OnLocationChanged se lanza cada vez que hay un cambio, por esto se llama el metodo atualizarUbicación
         @Override
         public void onLocationChanged(@NonNull Location location) {
             actualizarUbicacion(location);
@@ -167,7 +161,8 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
 
         }
     };
-
+    //metodo que hace referencia a la clase LocationManager para obtener
+    // los servicio de geo posicionamiento del dispositivo
     private void ubicacionactual(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this, "No hay permiso", Toast.LENGTH_LONG).show();
