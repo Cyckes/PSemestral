@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
 
         if (lightSensor == null) {
-            Toast.makeText(this, ("El dispositivo no tiene sensor de iluminacion"), Toast.LENGTH_LONG);
+            Toast.makeText(this, ("El dispositivo no tiene sensor de iluminacion"), Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 Toast.makeText(getApplicationContext(),"Inicio de sesión correcto !",Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(MainActivity.this, SensorGPS.class);
+                Intent i = new Intent(MainActivity.this, Menu.class);
                 startActivity(i);
             }
 
