@@ -141,9 +141,15 @@ public class MainActivity extends AppCompatActivity {
             //Método cuando la autenticación fue exitosa
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                Toast.makeText(getApplicationContext(),"Inicio de sesión correcto !",Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(MainActivity.this, Menu.class);
-                startActivity(i);
+                String user = etusuaario.getText().toString();
+                if ( user.matches("")){
+                    Toast.makeText(getApplicationContext(),"Introduzca su nombre de usuario",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Inicio de sesión correcto !", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(MainActivity.this, Menu.class);
+                    startActivity(i);
+                }
             }
 
             @Override
