@@ -191,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
                     etcontraseña.setText("");
                     etusuaario.setText("");
                     existe = false;
+                    Intent i = new Intent(MainActivity.this, Menu.class);
+                    startActivity(i);
                 }
                 else
                 {
