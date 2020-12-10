@@ -174,9 +174,9 @@ public class SensorGPS extends FragmentActivity implements OnMapReadyCallback {
             return;
         }
         LocationManager locationManager=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         actualizarUbicacion(location);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,15000,0,locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,15000,0,locationListener);
     }
 
     @Override
