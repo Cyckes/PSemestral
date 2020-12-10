@@ -89,44 +89,46 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        //msg_txt = (TextView) findViewById(R.id.txt_msg);
-        //login_btn = (Button) findViewById(R.id.login_btn);
         imgbtnHuella = (ImageButton) findViewById(R.id.imgbtnHuella);
 
+        //Creación del BIOMETRICMANAGER y comprobar si se puede utilizar el sensor de huella dactilar
         androidx.biometric.BiometricManager biometricManager = androidx.biometric.BiometricManager.from(this);
         switch (biometricManager.canAuthenticate())
         {
+            //Usuario puede utilizar el sensor de huella
             case BiometricManager.BIOMETRIC_SUCCESS:
-                //msg_txt.setText("Puede usar el sensor de huellas para iniciar sesión");
-                //msg_txt.setTextColor(Color.parseColor("#FAFAFA"));
+                Toast.makeText(getApplicationContext(),"Puede usar el sensor de huellas para iniciar sesión",Toast.LENGTH_SHORT).show();
                 break;
+            //El dispositivo no tiene el sensor de huellas
             case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                //msg_txt.setText("El dispositivo no dispone de un sensor de huellas");
-                //login_btn.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(),"El dispositivo no dispone de un sensor de huellas",Toast.LENGTH_SHORT).show();
                 break;
+            //EL sensor no esta en servicio
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                //msg_txt.setText("El sensor de huellas no esta disponible");
-                //login_btn.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(),"El sensor de huellas no esta disponible",Toast.LENGTH_SHORT).show();
                 break;
             case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                //msg_txt.setText("No se ha configurado nonguna huella, verificar las opciones del dispositivo");
-                //login_btn.setVisibility(View.GONE);
+            //El usuario no ha registrado ninguna huella
                 Toast.makeText(getApplicationContext(),"No se ha configurado nonguna huella, verificar las opciones del dispositivo",Toast.LENGTH_SHORT).show();
                 break;
         }
 
 
+        //Comprobar si se puede utilizar el sensor de huellas
+        //Primero se crea el EXECUTOR
         Executor executor = ContextCompat.getMainExecutor(this);
 
+
+        //Ahora la respuesta de la petición, si se puede utilizar el sensor o no
         final BiometricPrompt biometricPrompt = new BiometricPrompt(MainActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
+            //Método cuando ocurre un error en la autenticación
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
             }
 
             @Override
+            //Método cuando la autenticación fue exitosa
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
                 Toast.makeText(getApplicationContext(),"Inicio de sesión correcto !",Toast.LENGTH_SHORT).show();
@@ -135,12 +137,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            //Método cuando la autenticación fallo
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
             }
         });
 
 
+        //Creando el diálogo para el sensor de huella
         final BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Iniciar Sesión")
                 .setDescription("Utilice su huella dactilar para iniciar sesión")
@@ -148,13 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
 
-        //login_btn.setOnClickListener(new View.OnClickListener() {
-          //  @Override
-            //public void onClick(View view) {
-              //  biometricPrompt.authenticate(promptInfo);
-            //}
-        //});
-
+        //Evento de dar CLIC en la imagen de la HUELLA
         imgbtnHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
