@@ -22,6 +22,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.concurrent.Executor;
 
 import static android.hardware.Sensor.TYPE_LIGHT;
@@ -35,12 +37,20 @@ public class MainActivity extends AppCompatActivity {
     private SensorEventListener lightEvtListener;
     private View root;
     private float maxVal;
+    private TextInputEditText etusuaario, etcontraseña;
+    private String[] nombres = {"Dayan","Manuel","Byron","Alison","Kevin","Roberto","Rolando","Susan","Elena","Massiel"};
+    private String[] contra = {"day01","man02","byr03","ali04","kev05","rob06","rol07","sus08","ele09","mas10"};
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        etusuaario = (TextInputEditText) findViewById(R.id.etUsuario);
+        etcontraseña = (TextInputEditText) findViewById(R.id.etContraseña);
+        btnSesion = (Button) findViewById(R.id.btnSesion);
+        imgbtnHuella = (ImageButton) findViewById(R.id.imgbtnHuella);
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lightSensor = sensorManager.getDefaultSensor(TYPE_LIGHT);
@@ -89,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        imgbtnHuella = (ImageButton) findViewById(R.id.imgbtnHuella);
 
         //Creación del BIOMETRICMANAGER y comprobar si se puede utilizar el sensor de huella dactilar
         androidx.biometric.BiometricManager biometricManager = androidx.biometric.BiometricManager.from(this);
@@ -158,6 +167,34 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 biometricPrompt.authenticate(promptInfo);
 
+            }
+        });
+
+
+        //Iniciar sesión
+        btnSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nombre = etusuaario.getText().toString();
+                String pass = etcontraseña.getText().toString();
+                boolean existe = false;
+                for(int i = 0; i<10; i++)
+                {
+                    if(nombres[i].equals(nombre) && contra[i].equals(pass))
+                    {
+                        existe = true;
+                    }
+                }
+                if(existe)
+                {
+                    etcontraseña.setText("");
+                    etusuaario.setText("");
+                    existe = false;
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"ERROR\nNombre de usuario o contraseña incorrectos",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
